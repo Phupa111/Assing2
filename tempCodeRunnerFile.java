@@ -1,0 +1,1 @@
+nt speed[] = new int [numOfM];
