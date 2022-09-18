@@ -51,38 +51,20 @@ class MyPanel extends JPanel
 	 * 
 	 */
 	public MyPanel() {
-	    	int speed[] = new int [numOfM];
+	    
 		setBackground(Color.BLACK);
 		setSize(900,800);
 		M1 =new Image[numOfM];
 		for (int j = 0; j < numOfM; j++) {
 			 pointX[j] = (int)(Math.random()*850);
 			 pointY[j] =(int)(Math.random()*750);
-			 int type =(int)(Math.random()*11);
+			 int type =(int)(Math.random()*10);
 			 M1[j] =Toolkit.getDefaultToolkit().createImage(
 						System.getProperty("user.dir")+File.separator+(type+".png")
 						);
 			time[j] = new Timer();
-		
-			if(j>=0 &&  j<=numOfM)
-			{
-				if(j!=0)
-				{
-					if(pointX[j-1] == pointX[j] &&pointY[j-1] == pointY[j])
-					{
-						speed[j] = (int)(Math.random()*100);
-					}
-				}
-				else
-				{
-					if(pointX[j] == pointX[j+1] &&pointY[j] == pointY[j+1])
-					{
-						speed[j] = (int)(Math.random()*100);
-					}
-				}
-			}
-					
-			time[j].schedule(new MyTimer(this, j),00, speed[j]);
+			int speed = (int)(Math.random()*100);		
+			time[j].schedule(new MyTimer(this, j),00, speed);
 			
 		}
 			
@@ -96,7 +78,6 @@ class MyTimer extends TimerTask
 
 	MyPanel panel;
 	int j;
-	
 	public MyTimer(MyPanel panel,int j)
 	{
 		this.panel = panel;
@@ -105,10 +86,8 @@ class MyTimer extends TimerTask
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		int x =(int)(Math.random()*2)+(-1);
-		int y =(int)(Math.random()*2)+(-1);
-		panel.pointX[j] += x;
-		panel.pointY[j] +=y;
+		panel.pointX[j] += 1;
+		panel.pointY[j] +=1;
 		panel.repaint();
 	}
 
