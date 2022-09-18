@@ -2,9 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
+
 import java.awt.Toolkit;
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,21 +29,27 @@ public class Meteorite extends JFrame{
 	new Meteorite().setVisible(true);
 }
 }
+
 class MyPanel extends JPanel
 {
 	Image M1[];
 	int numOfM =10;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
+	Timer time[] =new Timer [numOfM];
 	@Override
 	public void paint(Graphics g) {
 		
 		super.paint(g);
 		for (int i = 0; i < numOfM; i++) {
-		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);	
+		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);
+			
 		}
 		
 	}
+	/**
+	 * 
+	 */
 	public MyPanel() {
 	    
 		setBackground(Color.BLACK);
@@ -54,7 +62,10 @@ class MyPanel extends JPanel
 			 M1[j] =Toolkit.getDefaultToolkit().createImage(
 						System.getProperty("user.dir")+File.separator+(type+".png")
 						);
-			 
+			time[j] = new Timer();
+			int speed = (int)(Math.random()*100);		
+			time[j].schedule(new MyTimer(this, j),00, speed);
+			
 		}
 			
 		
@@ -62,7 +73,25 @@ class MyPanel extends JPanel
 	
 }
 
+class MyTimer extends TimerTask
+{
 
+	MyPanel panel;
+	int j;
+	public MyTimer(MyPanel panel,int j)
+	{
+		this.panel = panel;
+		this.j = j;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		panel.pointX[j] += 1;
+		panel.pointY[j] +=1;
+		panel.repaint();
+	}
+
+}
 
 
 

@@ -1,0 +1,2 @@
+
+			time[j] = new Timer();		
