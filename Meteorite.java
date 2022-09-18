@@ -4,12 +4,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 
 public class Meteorite extends JFrame{
 	
@@ -30,13 +32,14 @@ public class Meteorite extends JFrame{
 }
 }
 
-class MyPanel extends JPanel
+class MyPanel extends JPanel 
 {
 	Image M1[];
 	int numOfM =10;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
 	Timer time[] =new Timer [numOfM];
+	int x,y;
 	@Override
 	public void paint(Graphics g) {
 		
@@ -55,17 +58,37 @@ class MyPanel extends JPanel
 		setSize(900,800);
 		M1 =new Image[numOfM];
 		for (int j = 0; j < numOfM; j++) {
+			final Integer J =new Integer(j);
 			 pointX[j] = (int)(Math.random()*850);
 			 pointY[j] =(int)(Math.random()*750);
 			 int type =(int)(Math.random()*11);
 			 M1[j] =Toolkit.getDefaultToolkit().createImage(
 						System.getProperty("user.dir")+File.separator+(type+".png")
 						);
-			time[j] = new Timer();
-	
-			time[j].schedule(new MyTimer(this, j),00,10);
+			// time[j] = new Timer();
+		 addMouseListener(new MouseInputAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseClicked(e);
+				x = e.getX();
+				y =e.getY(); 
+				if(x == pointX[J]&& y == pointY[J])
+				 {
+					M1[J] =Toolkit.getDefaultToolkit().createImage(
+						System.getProperty("user.dir")+File.separator+("bomb.gif")
+						);
+				 }
+
+			}
+		 });
+			// time[j].schedule(new MyTimer(this, j),00,10);
+			
 			
 		}
+	 
+		
+	  
 			
 		
 	}
