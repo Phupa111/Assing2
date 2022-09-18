@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
 import java.awt.Toolkit;
 import java.io.File;
 
@@ -42,11 +43,13 @@ class MyPanel extends JPanel
 		
 	}
 	public MyPanel() {
-	
+	    
+		setBackground(Color.BLACK);
+		setSize(900,800);
 		M1 =new Image[numOfM];
 		for (int j = 0; j < numOfM; j++) {
-			 pointX[j] = (int)(Math.random()*700);
-			 pointY[j] =(int)(Math.random()*650);
+			 pointX[j] = (int)(Math.random()*850);
+			 pointY[j] =(int)(Math.random()*750);
 			 int type =(int)(Math.random()*10);
 			 M1[j] =Toolkit.getDefaultToolkit().createImage(
 						System.getProperty("user.dir")+File.separator+(type+".png")
@@ -54,8 +57,7 @@ class MyPanel extends JPanel
 			 
 		}
 			
-		setBackground(Color.BLACK);
-		setSize(600,800);
+		
 	}
 	
 }
