@@ -63,7 +63,24 @@ class MyPanel extends JPanel
 						System.getProperty("user.dir")+File.separator+(type+".png")
 						);
 			time[j] = new Timer();
-	
+		
+			if(j>=0 &&  j<=numOfM)
+			{
+				if(j!=0)
+				{
+					if(pointX[j-1] == pointX[j] &&pointY[j-1] == pointY[j])
+					{
+						speed[j] = (int)(Math.random()*100);
+					}
+				}
+				else
+				{
+					if(pointX[j] == pointX[j+1] &&pointY[j] == pointY[j+1])
+					{
+						speed[j] = (int)(Math.random()*100);
+					}
+				}
+			}
 					
 			time[j].schedule(new MyTimer(this, j),00, speed[j]);
 			
