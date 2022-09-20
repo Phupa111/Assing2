@@ -8,8 +8,9 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
@@ -34,60 +35,30 @@ public class Meteorite extends JFrame{
 
 class MyPanel extends JPanel 
 {
-	Image M1[];
+
 	int numOfM =10;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
 	Timer time[] =new Timer [numOfM];
+	ImageIcon image[] = new ImageIcon[numOfM];  
+	JLabel labelM[] = new  JLabel[numOfM]; 
 	int x,y;
-	@Override
-	public void paint(Graphics g) {
-		
-		super.paint(g);
-		for (int i = 0; i < numOfM; i++) {
-		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);
-			
-		}
-		
-	}
-	/**
-	 * 
-	 */
+
 	public MyPanel() {
 		setBackground(Color.BLACK);
 		setSize(900,800);
-		M1 =new Image[numOfM];
 		for (int j = 0; j < numOfM; j++) {
-			final Integer J =new Integer(j);
+		
 			 pointX[j] = (int)(Math.random()*850);
 			 pointY[j] =(int)(Math.random()*750);
 			 int type =(int)(Math.random()*11);
-			 M1[j] =Toolkit.getDefaultToolkit().createImage(
-						System.getProperty("user.dir")+File.separator+(type+".png")
-						);
-			// time[j] = new Timer();
-		 addMouseListener(new MouseInputAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				super.mouseClicked(e);
-				x = e.getX();
-				y =e.getY(); 
-				if(x == pointX[J]&& y == pointY[J])
-				 {
-					M1[J] =Toolkit.getDefaultToolkit().createImage(
-						System.getProperty("user.dir")+File.separator+("bomb.gif")
-						);
-				 }
-
-			}
-		 });
-			// time[j].schedule(new MyTimer(this, j),00,10);
-			
-			
-		}
-	 
+			 image[j] =new ImageIcon(getClass().getResource(""+j+"png"));
+			 labelM[j] = new JLabel(image[j]);
+			 labelM[j].setBounds(pointX[j], pointY[j], 100, 100);
+			 add(labelM[j]);
 		
+	}
+
 	  
 			
 		
@@ -95,27 +66,7 @@ class MyPanel extends JPanel
 	
 }
 
-class MyTimer extends TimerTask
-{
 
-	MyPanel panel;
-	int j;
-	
-	public MyTimer(MyPanel panel,int j)
-	{
-		this.panel = panel;
-		this.j = j;
-	}
-	@Override
-	public void run() {
-		int x =(int)(Math.random()*2)+(-1);
-		int y =(int)(Math.random()*2)+(-1);
-		panel.pointX[j] += 1;
-		panel.pointY[j] +=1;
-		panel.repaint();
-	}
-
-}
 
 
 

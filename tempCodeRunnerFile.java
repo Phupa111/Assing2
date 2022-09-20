@@ -1,1 +1,1 @@
-nt speed[] = new int [numOfM];
+java.awt.Graphics
