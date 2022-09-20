@@ -2,17 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
-import javax.swing.ImageIcon;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 public class Meteorite extends JFrame{
 	
@@ -32,39 +26,40 @@ public class Meteorite extends JFrame{
 	new Meteorite().setVisible(true);
 }
 }
-
-class MyPanel extends JPanel 
+class MyPanel extends JPanel
 {
-
+	Image M1[];
 	int numOfM =10;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
-	Timer time[] =new Timer [numOfM];
-	ImageIcon image[] = new ImageIcon[numOfM];  
-	JLabel labelM[] = new  JLabel[numOfM]; 
-	int x,y;
-
-	public MyPanel() {
-		setBackground(Color.BLACK);
-		setSize(900,800);
-		for (int j = 0; j < numOfM; j++) {
+	@Override
+	public void paint(Graphics g) {
 		
-			 pointX[j] = (int)(Math.random()*850);
-			 pointY[j] =(int)(Math.random()*750);
-			 int type =(int)(Math.random()*11);
-			 image[j] =new ImageIcon(getClass().getResource(""+j+"png"));
-			 labelM[j] = new JLabel(image[j]);
-			 labelM[j].setBounds(pointX[j], pointY[j], 100, 100);
-			 add(labelM[j]);
+		super.paint(g);
+		for (int i = 0; i < numOfM; i++) {
+		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);	
+		}
 		
 	}
-
-	  
+	public MyPanel() {
+	
+		M1 =new Image[numOfM];
+		for (int j = 0; j < numOfM; j++) {
+			 pointX[j] = (int)(Math.random()*700);
+			 pointY[j] =(int)(Math.random()*650);
+			 int type =(int)(Math.random()*11);
+			 M1[j] =Toolkit.getDefaultToolkit().createImage(
+						System.getProperty("user.dir")+File.separator+(type+".png")
+						);
+			 
+		}
 			
-		
+		setBackground(Color.BLACK);
+		setSize(600,800);
 	}
 	
 }
+
 
 
 

@@ -1,1 +1,1 @@
-java.awt.Graphics
+ MyPanel panel =new MyPanel();
