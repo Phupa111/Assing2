@@ -8,6 +8,7 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
 public class Meteorite extends JFrame{
 	
   MyPanel panel =new MyPanel();
@@ -58,6 +59,11 @@ class MyPanel extends JPanel
 		setSize(600,800);
 	}
 	
+}
+class MyThred extends Thread
+{
+	MyThred()
+	{}
 }
 
 
