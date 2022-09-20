@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,15 +34,8 @@ class MyPanel extends JPanel
 	int numOfM =10;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
-	@Override
-	public void paint(Graphics g) {
-		
-		super.paint(g);
-		for (int i = 0; i < numOfM; i++) {
-		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);	
-		}
-		
-	}
+	MyThred t[] = new MyThred[numOfM];
+
 	public MyPanel() {
 	
 		M1 =new Image[numOfM];
@@ -52,18 +46,46 @@ class MyPanel extends JPanel
 			 M1[j] =Toolkit.getDefaultToolkit().createImage(
 						System.getProperty("user.dir")+File.separator+(type+".png")
 						);
-			 
+			 t[j] = new MyThred(M1[j], j, this); 
+			 t[j].start();
 		}
 			
 		setBackground(Color.BLACK);
 		setSize(600,800);
 	}
-	
+		@Override
+	public void paint(Graphics g) {
+		
+		super.paint(g);
+		for (int i = 0; i < numOfM; i++) {
+		   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);	
+		}
+		
+	}
 }
 class MyThred extends Thread
 {
-	MyThred()
-	{}
+	Image m;
+	int i;
+	MyPanel panel;
+	MyThred(Image m, int i,MyPanel panel)
+	{
+		this.m = m;
+		this.i  = i;
+		this.panel = panel;
+	}
+	@Override
+	public void run() {
+		panel.pointX[i] +=1;
+		panel.pointY[i] +=1;
+		panel.repaint();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
 
 
