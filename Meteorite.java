@@ -3,15 +3,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 
 public class Meteorite extends JFrame{
 	
@@ -34,73 +34,178 @@ public class Meteorite extends JFrame{
 class MyPanel extends JPanel
 {
 	Image M1[];
-	int numOfM =10;
+	int numOfM =15;
 	int pointX[] = new int[numOfM];
 	int pointY[] = new int[numOfM];
 	ImageIcon mc;
     JLabel label[] = new JLabel[numOfM];
-	//MyThred t;
-
+    MyThread thread[] = new MyThread[numOfM];
+    Exopled exopled[] = new Exopled[numOfM];
 	public MyPanel() {
-	
+	    setBackground(Color.BLACK);
+		setSize(900,800);
+		setLayout(null);
 		M1 =new Image[numOfM];
 		for (int j = 0; j < numOfM; j++) {
-			 pointX[j] = (int)(Math.random()*700);
-			 pointY[j] =(int)(Math.random()*600);
-			 int type =(int)(Math.random()*11);
-			//  M1[j] =Toolkit.getDefaultToolkit().createImage(
-			// 			System.getProperty("user.dir")+File.separator+(type+".png")
-			// 			);
-			 mc = new ImageIcon(getClass().getResource(type+".png"));
+			 pointX[j] = (int)(Math.random()*785);
+			 pointY[j] =(int)(Math.random()*660);
+			 int type =(int)(Math.random()*10)+1;
+			 final Integer J = new Integer(j); 
+			 mc = new ImageIcon(getClass().getClassLoader().getResource(""+type+".png"));
 			 label[j] = new JLabel(mc);
-			 label[j].setBounds(pointX[j],pointY[j],100,100);
+			 label[j].setBounds(pointX[j],pointY[j], 100, 100);
+			 thread[j]= new MyThread(label[j],j, this);
+			 thread[j].start();
+			 label[j].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseClicked(e);
+				if(e.getClickCount() == 2&& !e.isConsumed())
+				{
+					e.consume();
+					
+//					 mc = new ImageIcon(getClass().getClassLoader().getResource("bomb.gif"));
+//					 label[J].setIcon(mc);
+//					 label[J].setBounds(pointX[J], pointY[J], 150, 150);
+				    thread[J].isExpoled = !thread[J].isExpoled;
+					exopled[J] = new Exopled(mc, label[J]);
+					exopled[J].start();
+					 
+				}
+			}
+			});
 			 add(label[j]);
 			 System.out.println(pointX[j]+"  "+pointY[j]);
+			 
 		}
+		//label[0].setBounds(0,660, 100,100);
 			
-		setBackground(Color.BLACK);
-		setSize(600,800);
+		
 	}
-	// 	@Override
-	// public void paint(Graphics g) {
-		
-	// 	super.paint(g);
-	// 	for (int i = 0; i < numOfM; i++) {
-	// 	   g.drawImage(M1[i],pointX[i],pointY[i],50,50,this);
-	// 	//    t = new MyThred(M1[i], i, this,g); 
-	// 		t.start();	
-	// 	}
-		
-	// }
+	
 }
-// class MyThred extends Thread
-// {
-// 	Image m;
-// 	int i;
-// 	MyPanel panel;
-// 	Graphics g;
-// 	MyThred(Image m, int i,MyPanel panel,Graphics g)
-// 	{
-// 		this.m = m;
-// 		this.i  = i;
-// 		this.panel = panel;
-// 		this.g = g;
-// 	}
-// 	@Override
-// 	public void run() {
-// 		panel.pointX[i] +=1;
-// 		panel.pointY[i] +=1;
-// 		// g.drawImage(m, panel.pointX[i], panel.pointY[i], panel);
-// 		panel.repaint();
-// 		try {
-// 			Thread.sleep(1);
-// 		} catch (InterruptedException e) {
-// 			// TODO Auto-generated catch block
-// 			e.printStackTrace();
-// 		}
-// 	}
-// }
-
+class MyThread extends Thread
+{
+	JLabel label;
+	int i;
+	MyPanel panel;
+	int ranX;
+	int ranY;
+	int speed;
+	public boolean isExpoled = true;
+	public MyThread(JLabel label,int i,	MyPanel panel) 
+	{
+		this.i = i;
+		this.label= label;
+		this.panel = panel;
+		speed = (int)(Math.random()*50)+1;
+		ranX = (new Random().nextInt(3)-1);
+		ranY = (new Random().nextInt(3)-1);
+	    whileRandow();
+		
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+		super.run();
+		while(true)
+		{
+	
+		int x= panel.pointX[i]+=ranX;
+		int y= panel.pointY[i]+=ranY;
+		
+	    if(isExpoled)
+	    {
+		//farm
+		if(label.getX()+label.getWidth() > panel.getWidth())
+		{
+			
+			ranX = (new Random().nextInt(2)-1);
+			ranY = (new Random().nextInt(3)-1);
+			whileRandow();
+			x= panel.pointX[i]+=ranX;
+			y= panel.pointY[i]+=ranY;
+			speed = (int)(Math.random()*50)+1;
+	   
+		}
+		else if(label.getY()+label.getHeight() >panel.getHeight())
+		{
+			
+			
+			ranX = (new Random().nextInt(3)-1);
+			ranY = (new Random().nextInt(2)-1);
+			whileRandow();
+			x= panel.pointX[i]+=ranX;
+			y= panel.pointY[i]+=ranY;
+			speed = (int)(Math.random()*50)+1;
+		}
+		else if(label.getX()<=0)
+		{
+			
+			ranX = (new Random().nextInt(2));
+			ranY = (new Random().nextInt(3)-1);
+			whileRandow();
+			x= panel.pointX[i]+=ranX;
+			y= panel.pointY[i]+=ranY;
+			speed = (int)(Math.random()*50)+1;
+		  
+		}
+		else if(label.getY()<=0)
+		{
+			
+			ranX = (new Random().nextInt(3)-1);
+			ranY = (new Random().nextInt(2));
+			whileRandow();
+			x= panel.pointX[i]+=ranX;
+			y= panel.pointY[i]+=ranY;
+			speed = (int)(Math.random()*50)+1;
+		}	
+		label.setLocation(x,y);
+		try {
+			Thread.sleep(speed);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		
+		}
+	}
+    void whileRandow()
+    {
+    	while(ranX == 0 && ranY == 0) {
+			ranX = (new Random().nextInt(3)-1);
+			ranY = (new Random().nextInt(3)-1);
+		}
+    }
+}
+ class Exopled extends Thread
+ {
+	 ImageIcon mc;
+	 JLabel label;
+	 public Exopled(ImageIcon mc,JLabel label) {
+		 this.mc = mc;
+		 this.label = label;
+		
+	}
+	 @Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+		 mc = new ImageIcon(getClass().getClassLoader().getResource("bomb.gif"));
+		 label.setIcon(mc);
+		 label.setBounds(label.getX(),label.getY(), 150, 150);
+		 try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 label.setVisible(false);
+	}
+ }
 
 
 
